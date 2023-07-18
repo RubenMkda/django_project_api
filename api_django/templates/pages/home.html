@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+
+{% block title %}{{ context.title }}{% endblock %}
+
+{% block content %}
+<section class="w-full h-full">
+    <header class="flex items-center justify-around p-3 w-full">
+        <h1 class="uppercase font-medium text-white text-3xl text-pink-500	">{{ user.username }}</h1>
+        <a class="self-center bg-black text-violet-500 p-2 px-3 border border-violet-500 hover:text-violet-400 hover:border-violet-400"
+            href="{% url 'logout' %}">Logout</a>
+        <button data-modal-target="defaultModal" data-modal-toggle="defaultModal"
+            class="text-pink-500 border px-3 py-2 border-pink-500 hover:text-pink-400 hover:border-pink-400">Create</button>
+    </header>
+
+
+    <main class="h-auto mx-2 px-5 my-1 rounded p-2">
+        <h2 class="text-center text-2xl text-emerald-400 uppercase font-black py-4">Projects</h2>
+        <section class="px-2 flex items-center justify-center">
+            <main class="flex -mx-2 flex-wrap w-11/12 lg:w-9/12">
+                {% for project in context.projects %}
+                <div class="w-3/6 px-2 my-2 text-white md:w-2/6">
+                    <div class="bg-black border-rose-400 border-2 min-h-full">
+                        <img class="max-w-full aspect-video object-cover object-top" src="{{ project.url_image }}"
+                            loading="lazy" />
+                        <main class="px-3 pb-2">
+                            <h3 class="text-lg font-medium p text-center">{{ project.title }}</h3>
+                            <p class="break-words text-sm text-gray-400">{{ project.desp }}</p>
+                        </main>
+                        <footer class="flex flex-wrap justify-center gap-2 py-3">
+                            {% if project.url_code %}
+                            <a class="text-emerald-500 font-medium px-3 py-1 border-2 border-emerald-500 hover:text-emerald-400 hover:border-emerald-400"
+                                href="{{ project.url_code }}" t arget="_blank">Codigo</a>
+                            {% endif %}
+                            {% if project.url_repo %}
+                            <a class="text-violet-500 font-medium px-3 py-1 border-2 border-violet-500 hover:text-violet-400 hover:border-violet-400"
+                                href="{{ project.url_repo }}" target="_blank">Project</a>
+                            {% endif %}
+                            <form action="{% url 'delete_project' project.id %}" method="post">
+                                {% csrf_token %}
+                                <button type="button"
+                                    class="bg-red-500 font-medium px-3 py-1 border-2 border-red-500 hover:bg-red-400 hover:border-red-400 delete_project">
+                                    Delete
+                                </button>
+                            </form>
+                            <a class="text-cyan-500 font-medium px-3 py-1 border-2 border-cyan-500 hover:text-cyan-400 hover:border-cyan-400"
+                                href="{% url 'update_project' project.id %}">Update</a>
+                        </footer>
+                    </div>
+                </div>
+                {% empty %}
+                <h3 class="text-xl font-black text-white">no tienes proyectos aún.</h3>
+                {% endfor %}
+            </main>
+        </section>
+    </main>
+
+    <!-- Main modal -->
+    <section id="defaultModal" tabindex="-1" aria-hidden="true"
+        class="fixed hidden top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden h-screen flex items-center justify-center bg-slate-900 bg-opacity-75">
+        <div class="relative w-full max-w-2xl max-h-full overflow-y-auto">
+            <!-- Modal Content -->
+            <div id="contentModal" class="relative bg-violet-500 rounded">
+                <!-- Modal header -->
+                <header class="flex items-start justify-between py-2 px-4">
+                    <h3 class="text-2xl font-semibold text-black uppercase self-center">
+                        Create Project
+                    </h3>
+                    <button type="button"
+                        class="text-black bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded text-sm w-8 h-8 ml-auto inline-flex justify-center items-center"
+                        data-modal-hidden="defaultModal">
+                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                        </svg>
+                        <span class="sr-only">Close modal</span>
+                    </button>
+                </header>
+                <!-- Modal body -->
+                <main class="p-6 space-y-4">
+                    <form method="post" class="flex flex-col w-full justify-center">
+                        {{ context.form }}
+                        {% csrf_token %}
+                        <button
+                            class="bg-emerald-500 w-5/12 self-center py-4 rounded font-medium uppercase transition duration-150 ease-out hover:bg-emerald-400 lg:text-lg 2xl:text-2xl 2xl:font-bold"
+                            type="submit">Create</button>
+                    </form>
+                </main>
+            </div>
+        </div>
+    </section>
+
+
+</section>
+
+{% endblock %}
+
+{% block script %}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const modal = document.getElementById('defaultModal');
+        const contentModal = document.getElementById('contentModal');
+        const deleteBtns = document.querySelectorAll('.delete_project')
+
+        const showModal = () => {
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        };
+
+        const hideModal = () => {
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+        };
+
+        const createButton = document.querySelector('[data-modal-toggle="defaultModal"]');
+        const closeButton = document.querySelector('[data-modal-hidden="defaultModal"]');
+
+        createButton.addEventListener('click', showModal);
+        closeButton.addEventListener('click', hideModal);
+        window.addEventListener('click', function (e) {
+            if (e.target == modal) {
+                modal.classList.remove('flex')
+                modal.classList.add('hidden')
+            }
+        })
+
+        for (let i = 0; i < deleteBtns.length; i++) {
+            deleteBtns[i].addEventListener("click", function () {
+                let form = this.closest("form");
+                let confirmMessage = "¿Estás seguro que quieres eliminar el proyecto?";
+                if (confirm(confirmMessage)) form.submit();
+            })
+        }
+    });
+</script>
+{% endblock %}

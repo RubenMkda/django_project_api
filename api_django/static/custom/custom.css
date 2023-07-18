@@ -1,0 +1,46 @@
+input[type='text'], input[type='password'], input[type='email'], input[type='url']{
+  width: 100%;
+  background-color: transparent;
+  border-bottom: 2.5px solid black;
+  outline: none;
+  margin-bottom: .9em;
+}
+
+textarea{
+  background-color: transparent;
+  outline: none;
+  border: 2px solid black;
+  width: 100%;
+  resize: none;
+}
+
+.register ul{
+  display: none;
+}
+
+.register span{
+  display: none;
+}
+
+
+#contentModal, #defaultModal{
+  -webkit-animation-name: animarsuperior;
+  -webkit-animation-duration: 0.2s;
+  animation-name: animarsuperior;
+  animation-duration: 0.2s
+}
+
+label{
+  font-size: 1em;
+  font-weight: 600;
+}
+
+@-webkit-keyframes animatetop {
+  from {top:-300px; opacity:0} 
+  to {top:0; opacity:1}
+}
+
+@keyframes animarsuperior {
+  from {top:-300px; opacity:0}
+  to {top:0; opacity:1}
+}

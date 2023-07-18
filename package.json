@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "dev": "tailwindcss -i api_django/static/tw/tailwind-input.css -o api_django/static/css/ui.css --watch"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.3.2"
+  }
+}
