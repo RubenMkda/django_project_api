@@ -53,6 +53,7 @@ def home(request):
         form = ProjectsForm()
     user = request.user
     projects = Projects.objects.filter(user=user)
+    print(projects)
     context = {
         'title': 'Api projects',
         'projects': projects,
@@ -90,7 +91,6 @@ def technologies(request):
             return redirect('home')
     else:
         form = TechnologyForm()
-    print(technologies)
     return render(request, 'pages/tech.html', {'form': form, 'technologies': technologies})
 
 class ProjectsView(APIView):
