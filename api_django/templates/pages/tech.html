@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %} Technologies {% endblock %}
+
+{% block content %}
+<div class="w-screen h-screen flex items-center">
+    <section class="bg-violet-500 px-2 h-full overflow-y-auto w-2/11 min-w-[130px]">
+        <header>
+            <h2 class="text-center uppercase font-bold">Technologies</h2>
+        </header>
+        <main class="pb-2">
+            <ul>
+                {% for technology in technologies %}
+                <li class="text-center py-2">{{ technology.name }}</li>
+                {% endfor %}
+            </ul>
+        </main>
+    </section>
+
+    <section class="w-full flex flex-col items-center justify-center h-full">
+        <header>
+            <h2 class="font-black text-white text-3xl text-center p-3 uppercase">adding Technologies</h2>
+        </header>
+        <main
+            class="p-9 flex flex-col gap-4 bg-violet-500 text-black w-11/12 rounded-md md:items-center md:p-5 md:w-8/12 lg:w-5/12 2xl:w-4/12 max-h-[80%] overflow-y-scroll">
+            <form class="flex flex-col gap-4 justify-center font-medium sm:text-base md:w-10/12 md:text-xl 2xl:text-2xl"
+                method="post">
+                {% csrf_token %}
+                {{ form }}
+                <button
+                    class="bg-emerald-500 w-5/12 self-center py-4 rounded font-bold uppercase transition duration-150 ease-out hover:bg-emerald-400 lg:text-lg 2xl:text-2xl 2xl:font-bold"
+                    type="submit">Create</button>
+            </form>
+        </main>
+    </section>
+</div>
+{% endblock %}

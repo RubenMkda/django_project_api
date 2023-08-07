@@ -3,11 +3,13 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login, authenticate
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.authentication import BasicAuthentication
-from .forms import CustomUserCreationForm, ProjectsForm
-from .models import Projects
+
+from .forms import CustomUserCreationForm, ProjectsForm, TechnologyForm
+from .models import Projects, Technology
 from .serializers import ProjectsSerializer
 from .permissions import IsAuthenticatedOrCreateOnly
 
@@ -29,7 +31,6 @@ def login_view(request):
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
             user = authenticate(username=username, password=password)
-
             if user is not None:
                 login(request, user)
                 return redirect('home')
@@ -78,6 +79,20 @@ def update_project(request, project_id):
         form = ProjectsForm(instance=project)
     return render(request, 'pages/update_project.html', {'form': form, 'project': project})
 
+@login_required
+def technologies(request):
+    technologies = Technology.objects.all()
+    if request.method == 'POST':
+        form = TechnologyForm(request.POST)
+        if form.is_valid():
+            form.clean_name()
+            form.save()
+            return redirect('home')
+    else:
+        form = TechnologyForm()
+    print(technologies)
+    return render(request, 'pages/tech.html', {'form': form, 'technologies': technologies})
+
 class ProjectsView(APIView):
     authentication_classes = [BasicAuthentication]
     permission_classes = [IsAuthenticatedOrCreateOnly]
@@ -86,8 +101,6 @@ class ProjectsView(APIView):
         projects = Projects.objects.all()
         serializer = ProjectsSerializer(projects, many=True)
         return Response(serializer.data)
-
-
 
 def index(request):
     return render(request, 'pages/index.html')

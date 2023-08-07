@@ -3,30 +3,20 @@
 {% block title %}Register{% endblock %}
 
 {% block content %}
-<div class="w-screen h-full flex items-center justify-center">
+<div class="w-screen h-screen flex items-center justify-center">
     <section
-        class="register p-9 flex flex-col gap-4 bg-violet-500 text-black rounded-md justify-stretch md:items-center md:p-5 md:w-8/12 lg:w-5/12 2xl:w-4/12">
-        <h1 class="font-black text-5xl text-center p-3 py-2 uppercase">Register</h1>
-        <form method="post"
-            class="flex flex-col gap-4 justify-center font-medium sm:text-base md:w-10/12 md:text-xl 2xl:text-2xl">
+        class="p-9 flex flex-col gap-4 bg-violet-500 text-black w-11/12 rounded-md md:items-center md:p-5 md:w-8/12 lg:w-5/12 2xl:w-4/12">
+        <h2 class="font-black text-5xl text-center p-3 uppercase">Register</h2>
+        <form class="flex flex-col justify-center font-medium sm:text-base md:w-10/12" method="post">
             {% csrf_token %}
             {{ form.as_p }}
             <button type="submit"
-                class="bg-emerald-500 w-3/12 self-center py-4 rounded font-medium uppercase transition duration-150 ease-out hover:bg-emerald-400 lg:text-lg 2xl:text-2xl 2xl:font-bold">Register</button>
+                class="bg-emerald-500 w-5/12 self-center py-4 rounded font-medium uppercase transition duration-150 ease-out hover:bg-emerald-400 lg:text-lg 2xl:text-2xl 2xl:font-bold">Register</button>
         </form>
-        <div class="flex items-center justify-center w-full gap-4">
-            <div
-                class="text-center bg-black text-emerald-500 p-1 border border-emerald-500 sm:text-base hover:text-emerald-400 hover:border-emerald-500">
-                <h2 class="font-medium py-1 uppercase 2xl:font-bold 2xl:text-xl cursor-default">Login with</h2>
-                <a href="">Facebook</a>
-                <a href="">Instagram</a>
-                <a href="">Facebook</a>
-            </div>
-            <div class="flex items-center justify-center flex-col font-medium">
-                <h2>Do you have account?</h2>
-                <a class="p-2 px-4 font-ligt bg-black text-violet-500 border border-violet-500 hover:text-violet-400 hover:border-violet-400"
-                    href="{% url 'login' %}">Login</a>
-            </div>
+        <div>
+            <h2>Do you have account?</h2>
+            <a class="p-2 px-4 font-ligt bg-black text-violet-500 border border-violet-500 hover:text-violet-400 hover:border-violet-400"
+                href="{% url 'login' %}" href="{% url 'login' %}">Login</a>
         </div>
     </section>
 </div>

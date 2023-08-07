@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import register, home, login_view, index, delete_project, update_project, ProjectsView
+from .views import register, home, login_view, index, delete_project, update_project, technologies,ProjectsView
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
@@ -11,4 +11,5 @@ urlpatterns = [
     path('projects/<int:project_id>/delete/', delete_project, name='delete_project'),
     path('projects/<int:project_id>/update/', update_project, name='update_project'),
     path('api/projects/', ProjectsView.as_view(), name='api-projects'),
+    path('technologies', technologies, name='technologies')
 ]
