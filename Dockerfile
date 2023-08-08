@@ -1,21 +1,12 @@
-FROM python:3.9 as requirements-stage
+FROM python:3.10.4
 
-WORKDIR /tmp
-
-RUN pip install poetry
-
-COPY ./pyproject.toml ./poetry.lock* /tmp/
-
-RUN poetry export -f requirements.txt --output requirements.txt --without-hashes
-
-FROM python:3.11
+ENV PIP_DISABLE_PIP_VERSION_CHECK 1
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 
 WORKDIR /code
 
-COPY --from=requirements-stage /tmp/requirements.txt /code/requirements.txt
+COPY ./requirements.txt .
+RUN pip install -r requirements.txt
 
-RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
-
-COPY ./api_django /api_django/users
-
-CMD ["uvicorn", "app.main:app", "--proxy-headers", "--host", "0.0.0.0", "--port", "80"]
+COPY . .
